@@ -1,0 +1,36 @@
+version: "3"
+services:
+  backend:
+    container_name: flask_backend
+    build: ./backend
+    restart: always
+    volumes:
+      - ./backend:/usr/src/backend/
+    ports:
+      - 5000:5000
+    depends_on:
+      - db
+    networks:
+      - stdev-net
+  db:
+    container_name: postgres
+    image: postgres:12-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=stdev
+    ports:
+      - 5432:5432
+    expose:
+      - 5432
+    networks:
+      - stdev-net
+volumes:
+  postgres_data:
+
+networks:
+  stdev-net:
+    driver: bridge
