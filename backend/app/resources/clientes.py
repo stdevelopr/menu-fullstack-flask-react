@@ -10,7 +10,11 @@ csm = ClienteSchema(many=True)
 class Clientes(Resource):
     def get(self):
         result = Cliente.query.all()
-        return csm.jsonify(result)
+        resp_size = len(result)
+        resp = csm.jsonify(result)
+        resp.headers.add( 'Access-Control-Expose-Headers', 'Content-Range')
+        resp.headers.add('Content-Range',f'clientes : 0-9/{resp_size}')
+        return resp
 
     def post(self):
         json_data = request.get_json()

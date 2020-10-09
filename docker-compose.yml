@@ -1,5 +1,15 @@
 version: "3"
 services:
+  frontend:
+    container_name: react_frontend
+    build: ./frontend
+    volumes:
+      - ./frontend:/usr/src/frontend/
+      - ./backend:/usr/src/backend/
+    ports:
+      - 3000:3000
+    networks:
+      - stdev-net
   backend:
     container_name: flask_backend
     build: ./backend

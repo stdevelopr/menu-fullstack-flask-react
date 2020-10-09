@@ -29,4 +29,8 @@ def create_app(test_config=None):
     api.add_resource(pedidos.PedidoId, '/pedidos/<int:id>')
     app.register_blueprint(api_bp)
 
+    @app.route('/')
+    def hello():
+        return render_template('index.html')
+
     return app
