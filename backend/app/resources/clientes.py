@@ -1,16 +1,28 @@
 
 from flask import current_app, request, jsonify
-from flask_restful import Resource
+from flask_restful import Resource, reqparse
 from app.model import Cliente
 from app.serializer import ClienteSchema
+import json
 
 cs = ClienteSchema()
 csm = ClienteSchema(many=True)
 
 class Clientes(Resource):
     def get(self):
-        result = Cliente.query.all()
-        resp_size = len(result)
+        # try to get url parameters to sort
+        try:
+            parser = reqparse.RequestParser()
+            parser.add_argument('sort', action='split')
+            parser.add_argument('range', action='split')
+            args = parser.parse_args()
+            sort = json.loads(args['sort'])
+            range = json.loads(args['range'])
+            arg = getattr(getattr(Cliente, sort[0]), sort[1].lower())()
+            result = Cliente.query.order_by(arg).offset(range[0]).limit(range[1]-range[0]+1).all()
+        except:
+            result = Cliente.query.order_by('id').all()
+        resp_size = Cliente.query.count()
         resp = csm.jsonify(result)
         resp.headers.add( 'Access-Control-Expose-Headers', 'Content-Range')
         resp.headers.add('Content-Range',f'clientes : 0-9/{resp_size}')
@@ -44,9 +56,13 @@ class ClienteId(Resource):
     def put(self, id):
         json_data = request.get_json()
 
+        # clean null values
+        json_data = {key: value for key, value in json_data.items() 
+        if value is not None}
+
         # Validate and deserialize input
         try:
-            data = cs.load(json_data)
+            data = cs.load(json_data, partial=True)
         except Exception as err:
             return err.messages, 422
 

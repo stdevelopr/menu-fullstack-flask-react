@@ -23,9 +23,9 @@ def create_app(test_config=None):
     # routes config
     from .resources import clientes, pedidos
     api.init_app(app)
-    api.add_resource(clientes.Clientes, '/clientes/')
+    api.add_resource(clientes.Clientes, '/clientes')
     api.add_resource(clientes.ClienteId, '/clientes/<int:id>')
-    api.add_resource(pedidos.Pedidos, '/pedidos/')
+    api.add_resource(pedidos.Pedidos, '/pedidos')
     api.add_resource(pedidos.PedidoId, '/pedidos/<int:id>')
     app.register_blueprint(api_bp)
 
