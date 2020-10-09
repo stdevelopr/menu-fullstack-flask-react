@@ -11,7 +11,7 @@ const ClientList = props => {
   return (
     <List {...props}>
       <Datagrid>
-        <TextField source="id" sortable={false} />
+        <TextField source="id" />
         <TextField source="primeiro_nome" />
         <TextField source="ultimo_nome" />
         <TextField source="email" />

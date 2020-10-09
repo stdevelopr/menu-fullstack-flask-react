@@ -1,14 +1,31 @@
 
 from flask import current_app, request, jsonify
-from flask_restful import Resource
+from flask_restful import Resource, reqparse
 from app.model import Pedido
 from app.serializer import PedidoSchema
+import json
+
+psm = PedidoSchema(many=True)
 
 class Pedidos(Resource):
     def get(self):
-        ps = PedidoSchema(many=True)
-        result = Pedido.query.all()
-        return ps.jsonify(result)
+        try:
+            parser = reqparse.RequestParser()
+            parser.add_argument('sort', action='split')
+            parser.add_argument('range', action='split')
+            args = parser.parse_args()
+            sort = json.loads(args['sort'])
+            range = json.loads(args['range'])
+            print(sort, range)
+            arg = getattr(getattr(Pedido, sort[0]), sort[1].lower())()
+            result = Pedido.query.order_by(arg).offset(range[0]).limit(range[1]-range[0]+1).all()
+        except:
+            result = Pedido.query.order_by('id').all()
+        resp = psm.jsonify(result)
+        resp_size = Pedido.query.count()
+        resp.headers.add( 'Access-Control-Expose-Headers', 'Content-Range')
+        resp.headers.add('Content-Range',f'clientes : 0-9/{resp_size}')
+        return resp
 
     def post(self):
         json_data = request.get_json()
