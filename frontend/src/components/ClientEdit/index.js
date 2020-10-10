@@ -5,6 +5,7 @@ const ClientEdit = props => {
   return (
     <Edit title="Editar cliente" {...props}>
       <SimpleForm>
+        <TextInput source="id" disabled />
         <TextInput source="primeiro_nome" />
         <TextInput source="ultimo_nome" />
         <TextInput source="email" />

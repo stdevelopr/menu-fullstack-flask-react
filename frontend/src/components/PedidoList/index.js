@@ -5,7 +5,8 @@ import {
   DateField,
   TextField,
   EditButton,
-  DeleteButton
+  DeleteButton,
+  ReferenceField
 } from "react-admin";
 
 const PedidoList = props => {
@@ -13,7 +14,9 @@ const PedidoList = props => {
     <List {...props}>
       <Datagrid>
         <TextField source="id" />
-        <TextField label="Cliente ID" source="cliente_id" />
+        <ReferenceField source="cliente_id" reference="clientes">
+          <TextField label="Nome" source="primeiro_nome" />
+        </ReferenceField>
         <TextField source="status" />
         <DateField source="data" locales="pt-BR" />
         <TextField source="valor" />

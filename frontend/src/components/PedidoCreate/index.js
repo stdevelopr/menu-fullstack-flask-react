@@ -5,7 +5,7 @@ const PedidoCreate = props => {
   return (
     <Create title="Criar Pedido" {...props}>
       <SimpleForm redirect="list">
-        <TextInput source="cliente_id" />
+        <TextInput label="Cliente ID" source="cliente_id" />
         <TextInput source="status" />
         <TextInput source="valor" />
       </SimpleForm>

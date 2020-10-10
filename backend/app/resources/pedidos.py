@@ -5,6 +5,7 @@ from app.model import Pedido
 from app.serializer import PedidoSchema
 import json
 
+ps = PedidoSchema()
 psm = PedidoSchema(many=True)
 
 class Pedidos(Resource):
@@ -16,7 +17,6 @@ class Pedidos(Resource):
             args = parser.parse_args()
             sort = json.loads(args['sort'])
             range = json.loads(args['range'])
-            print(sort, range)
             arg = getattr(getattr(Pedido, sort[0]), sort[1].lower())()
             result = Pedido.query.order_by(arg).offset(range[0]).limit(range[1]-range[0]+1).all()
         except:
@@ -29,7 +29,7 @@ class Pedidos(Resource):
 
     def post(self):
         json_data = request.get_json()
-        ps = PedidoSchema()
+
         if not json_data:
             return {"message": "Dados de entrada não fornecidos"}, 400
         # Validate and deserialize input
@@ -49,14 +49,16 @@ class Pedidos(Resource):
     
 class PedidoId(Resource):
     def get(self, id):
-        ps = PedidoSchema()
         result = Pedido.query.get(id)
 
         return ps.jsonify(result)
     
     def put(self, id):
         json_data = request.get_json()
-        ps = PedidoSchema()
+
+        # clean null values
+        json_data = {key: value for key, value in json_data.items() 
+        if value is not None}
 
         # Validate and deserialize input
         try:

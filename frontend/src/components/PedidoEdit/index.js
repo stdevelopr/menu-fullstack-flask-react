@@ -3,7 +3,7 @@ import { Edit, SimpleForm, TextInput, DateInput } from "react-admin";
 
 const PedidoEdit = props => {
   return (
-    <Edit title="Editar cliente" {...props}>
+    <Edit title="Editar pedido" {...props}>
       <SimpleForm>
         <TextInput source="cliente_id" />
         <TextInput source="status" />
