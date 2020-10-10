@@ -11,7 +11,7 @@ api = Api(api_bp)
 
 def create_app(test_config=None):
     # create and configure the app
-    app = Flask(__name__, instance_relative_config=True)
+    app = Flask(__name__, instance_relative_config=True, static_folder="static")
     app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://postgres:postgres@db/stdev"
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 

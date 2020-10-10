@@ -11,6 +11,9 @@ const chartOptions = {
     text: "Pedidos por status",
     align: "top"
   },
+  noData: {
+    text: "Sem pedidos..."
+  },
   plotOptions: {
     pie: {
       donut: {
@@ -28,7 +31,7 @@ const chartOptions = {
       }
     }
   },
-  labels: ["loading..."],
+  labels: [],
   legend: {
     position: "bottom"
   }
@@ -45,7 +48,7 @@ const statusReducer = (accumulator, current_value) => {
 };
 
 const PieChart = ({ pedidos }) => {
-  const [series, setSeries] = useState([1, 1]);
+  const [series, setSeries] = useState([]);
   const [options, setOptions] = useState(chartOptions);
 
   useEffect(() => {

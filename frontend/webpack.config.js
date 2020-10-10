@@ -14,6 +14,13 @@ module.exports = {
         use: {
           loader: "babel-loader"
         }
+      },
+      {
+        test: /\.(png|jpe?g|gif)$/i,
+        loader: "file-loader",
+        options: {
+          publicPath: "static"
+        }
       }
     ]
   },

@@ -1,6 +1,7 @@
 import React from "react";
 import { Admin, Resource } from "react-admin";
 import restProvider from "ra-data-simple-rest";
+import Layout from "./components/Layout";
 import DashBoard from "./components/DashBoard";
 import ClientList from "./components/ClientList";
 import ClientCreate from "./components/ClientCreate";
@@ -13,6 +14,7 @@ import UserIcon from "@material-ui/icons/Group";
 
 const App = () => (
   <Admin
+    layout={Layout}
     dashboard={DashBoard}
     dataProvider={restProvider("http://localhost:5000")}
   >
