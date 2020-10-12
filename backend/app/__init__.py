@@ -4,16 +4,20 @@ from flask_migrate import Migrate
 from .model import configure as config_db
 from .serializer import configure as config_ma
 
-api_bp = Blueprint('api', __name__)
-api = Api(api_bp)
 
 
 
 def create_app(test_config=None):
     # create and configure the app
-    app = Flask(__name__, instance_relative_config=True, static_folder="static")
+    app = Flask(__name__, instance_relative_config=True)
     app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://postgres:postgres@db/stdev"
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    api_bp = Blueprint('api', __name__)
+    api = Api(api_bp)
+
+    # load the test config if passed in
+    if test_config:
+        app.config.from_mapping(test_config)
 
     # external config
     config_db(app)

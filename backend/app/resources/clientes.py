@@ -3,6 +3,7 @@ from flask import current_app, request, jsonify
 from flask_restful import Resource, reqparse
 from app.model import Cliente
 from app.serializer import ClienteSchema
+from app.common.utils import clean_null_values_from_json
 import json
 
 cs = ClienteSchema()
@@ -16,8 +17,10 @@ class Clientes(Resource):
             parser.add_argument('sort', action='split')
             parser.add_argument('range', action='split')
             args = parser.parse_args()
-            sort = json.loads(args['sort'])
-            range = json.loads(args['range'])
+            if args['sort']:
+                sort = json.loads(args['sort'])
+            if args['range']:
+                range = json.loads(args['range'])
             arg = getattr(getattr(Cliente, sort[0]), sort[1].lower())()
             result = Cliente.query.order_by(arg).offset(range[0]).limit(range[1]-range[0]+1).all()
         except:
@@ -56,9 +59,10 @@ class ClienteId(Resource):
     def put(self, id):
         json_data = request.get_json()
 
-        # clean null values
-        json_data = {key: value for key, value in json_data.items() 
-        if value is not None}
+        if not json_data:
+            return {"message": "Dados de entrada não fornecidos"}, 400
+
+        json_data = clean_null_values_from_json(json_data)
 
         # Validate and deserialize input
         try:
@@ -76,4 +80,4 @@ class ClienteId(Resource):
         client = Cliente.query.filter_by(id=id).first()
         current_app.db.session.delete(client)
         current_app.db.session.commit()
-        return jsonify('Deletado!')
+        return jsonify({'msg': 'Deletado!', 'cliente': cs.dump(client)})
