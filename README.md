@@ -11,7 +11,7 @@ docker-compose up
 Executar dentro da pasta backend:
 
 ```
-python -m pytest -s
+python -m pytest
 ```
 
 ### Documentação da API
