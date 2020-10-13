@@ -1,5 +1,6 @@
 from flask import Flask, Blueprint, render_template
 from flask_restful import Api
+from flask_restful_swagger import swagger
 from flask_migrate import Migrate
 from .model import configure as config_db
 from .serializer import configure as config_ma
@@ -13,7 +14,7 @@ def create_app(test_config=None):
     app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://postgres:postgres@db/stdev"
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     api_bp = Blueprint('api', __name__)
-    api = Api(api_bp)
+    api = swagger.docs(Api(api_bp), apiVersion='0.1')
 
     # load the test config if passed in
     if test_config:

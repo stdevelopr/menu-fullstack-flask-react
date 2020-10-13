@@ -1,5 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 import datetime
+from flask_restful_swagger import swagger
 
 db = SQLAlchemy()
 
@@ -7,7 +8,7 @@ def configure(app):
     db.init_app(app)
     app.db = db
 
-
+@swagger.model
 class Cliente(db.Model):
     __tablename__ = 'cliente'
     id = db.Column(db.Integer, primary_key=True)
