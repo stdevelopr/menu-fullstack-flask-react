@@ -4,6 +4,8 @@
 docker-compose up
 ```
 
+Abra o navegador em: http://localhost:5000/
+
 ### Para rodar os testes
 
 (Testes feitos para o endpoint "clientes")
